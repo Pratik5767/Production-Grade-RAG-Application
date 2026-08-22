@@ -41,6 +41,7 @@ def save_processed_locally(data: dict, source_type: str, filename: str) -> str:
     return dest
 
 
+# orchestrating the complete data ingestion flow
 def process_file(file_path: str, filename: str, source_type: str):
     """Parse → chunk → save locally → embed → index in Qdrant."""
 
@@ -81,7 +82,8 @@ def process_file(file_path: str, filename: str, source_type: str):
             # 4. Embed and index in Qdrant
             with logfire.span("Vectorizing & Indexing"):
                 embeddings = embed_texts(chunks)
-                
+
+                # PointStruct converts embedded chunk in data point of a particular vector database i.e qdrant 
                 points = [
                     models.PointStruct(
                         id=str(uuid.uuid4()),
@@ -95,6 +97,7 @@ def process_file(file_path: str, filename: str, source_type: str):
                     for chunk, vector in zip(chunks, embeddings)
                 ]
 
+                # ingesting the data points in the qdrant
                 qdrant_client.upsert(
                     collection_name=settings.QDRANT_COLLECTION,
                     points=points,
