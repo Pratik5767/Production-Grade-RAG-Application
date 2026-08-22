@@ -12,7 +12,6 @@ def parse_office(file_path: str):
         try:
             # Unstructured automatically detects if it's docx or pptx
             elements = partition(filename=file_path)
-
             full_text = "\n".join([str(el) for el in elements])
             
             if not full_text.strip():

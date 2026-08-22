@@ -10,9 +10,11 @@ def parse_html(file_path: str):
 
     with logfire.span("📄 HTML Parsing", filename=file_path):
         try:
+            # opening the file in the read mode and storing in
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
-            
+
+            # BeautifulSoup parses the html type content
             soup = BeautifulSoup(content, "html.parser")
             
             # 1. Remove Junk (Scripts, Styles, Metadata)

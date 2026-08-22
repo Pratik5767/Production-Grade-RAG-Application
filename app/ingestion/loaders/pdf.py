@@ -10,7 +10,10 @@ def parse_pdf(file_path: str) -> str:
 
     with logfire.span("PDF Parsing (local)", filename=file_path):
         try:
+            # PdfReader parses the pdf related content 
             reader = PdfReader(file_path)
+
+            # total pages in a pdf
             total_pages = len(reader.pages)
 
             logfire.info(f"PDF has {total_pages} pages.")
