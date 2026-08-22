@@ -7,11 +7,11 @@ from app.config import settings
 
 BATCH_SIZE = 50
 _GEMINI_DIM = 3072
-_FALLBACK_DIM = 768
+_FALLBACK_DIM = 768 # all-mpnet-base-v2
 
 
 _active_model = None
-_model_type: str | None = None # "gemini" or "fallback"
+_model_type: str | None = None  # "gemini" or "fallback"
 
 
 def _probe_gemini():
@@ -34,8 +34,9 @@ def _probe_gemini():
 
 
 def _load_fallback():
+    """Returns sentence-transformer as a fallback model"""
+    
     logfire.info("Loading sentence-transformers fallback (all-mpnet-base-v2, 768-dim).")
-
     return SentenceTransformer("all-mpnet-base-v2")
 
 
@@ -48,7 +49,6 @@ def _init():
         return
 
     gemini = _probe_gemini()
-
     if gemini:
         _active_model = gemini
         _model_type = "gemini"
@@ -65,6 +65,8 @@ def get_embedding_dim() -> int:
 
 
 def _embed_batch(batch: list[str]) -> list[list[float]]:
+    """Returns the embeded document in batch"""
+
     if _model_type == "gemini":
         # Exponential backoff: 1 s → 2 s → 4 s → 8 s (4 attempts total)
         for attempt in range(4):
@@ -92,6 +94,8 @@ def _embed_batch(batch: list[str]) -> list[list[float]]:
 
 
 def embed_query(query: str) -> list[float]:
+    """Returns the embeded query"""
+
     _init()
 
     if _model_type == "gemini":
@@ -101,6 +105,8 @@ def embed_query(query: str) -> list[float]:
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
+    """embeds the text within the document and return it in list of batches"""
+
     _init()
 
     all_embeddings: list[list[float]] = []
