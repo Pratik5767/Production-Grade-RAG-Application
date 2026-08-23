@@ -11,7 +11,7 @@ class Settings:
     QDRANT_COLLECTION = "enterprise_rag"
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-    GROQ_MODEL = "openai/gpt-oss-120b"
+    GROQ_MODEL = "openai/gpt-oss-20b"
     GROQ_FALLBACK_API_KEY = os.getenv("GROQ_FALLBACK_API_KEY")
 
 
