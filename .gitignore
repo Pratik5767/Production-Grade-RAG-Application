@@ -1,0 +1,7 @@
+.venv/
+.env
+__pycache__
+imp-commands.txt
+DATA/
+DOCS/
+processed_data/
